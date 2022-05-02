@@ -14,3 +14,8 @@ https://docs.google.com/spreadsheets/d/12mSDEriuKdqTLLbqUrX3p_jg2HtWJgclc9v0oQ5T
 https://docs.google.com/spreadsheets/d/12mSDEriuKdqTLLbqUrX3p_jg2HtWJgclc9v0oQ5TKWA/edit?usp=sharing
 # ワイヤーフレーム
 https://docs.google.com/spreadsheets/d/12mSDEriuKdqTLLbqUrX3p_jg2HtWJgclc9v0oQ5TKWA/edit?usp=sharing
+# ER図
+![ER図](./TimeCook_ER.png)
+
+# 画面遷移図
+![ER図](./TimeCook_ScrTra.png)
