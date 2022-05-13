@@ -1,0 +1,177 @@
+<% taskname = "" %>
+<% taskcolor = "" %>
+<% taskstarttime = "" %>
+<% tasktime = "" %>
+<% maxtime = [] %>
+<% tasknum = 0 %>
+
+<% @tasks.each do |task| %>
+  <% taskname = taskname + "', '" + task.name %>
+  <% taskcolor = taskcolor + "', '" + task.color %>
+  <% task.memo %>
+  <% taskstarttime = taskstarttime + ", " + task.start_time.to_s %>
+  <% tasktime = tasktime + ", " + task.task_time.to_s %>
+  <% maxtime << task.start_time + task.task_time %>
+  <input type="hidden" disabled="true" value="<%= task.name %>" id="taskna<%= tasknum %>" />
+  <input type="hidden" disabled="true" value="<%= task.color %>" id="taskco<%= tasknum %>" />
+  <input type="hidden" disabled="true" value="<%= task.memo %>" id="taskme<%= tasknum %>" />
+  <input type="hidden" disabled="true" value="<%= task.start_time %>" id="taskst<%= tasknum %>" />
+  <input type="hidden" disabled="true" value="<%= task.task_time %>" id="taskta<%= tasknum %>" />
+  <script>
+  var skna<%= tasknum %> = document.getElementById("taskna<%= tasknum %>").value,
+  skco<%= tasknum %> = document.getElementById("taskco<%= tasknum %>").value,
+  skme<%= tasknum %> = document.getElementById("taskme<%= tasknum %>").value,
+  skst<%= tasknum %> = Number(document.getElementById("taskst<%= tasknum %>").value),
+  skta<%= tasknum %> = Number(document.getElementById("taskta<%= tasknum %>").value),
+
+  time<%= tasknum %> = skst<%= tasknum %> + skta<%= tasknum %>,
+
+  limitMs<%= tasknum %> = 0,
+  restMs<%= tasknum %> = 0;
+
+  stlimitMs<%= tasknum %> = 0,
+  strestMs<%= tasknum %> = 0;
+
+  </script>
+  <% tasknum += 1 %>
+  <% end %>
+
+<table  style="width:1200px; height:400px">
+<thead>
+  <tr>
+    <th style="width:500px; text-align: left; font-size: 20px;">レシピシート</th>
+    <th>
+    <div id="nav">
+      <% if logged_in? %>
+      <%= link_to "マイレシピに登録", edit_recipe_path(recipe_id: @recipes.id) %>
+      <% end %>
+      <input type="hidden" disabled="true" value="<%= maxtime.max %>" id="time" />    
+      <button id ="start">start</button>
+      <button id ="stop">stop</button>
+      <button id ="reset">reset</button>    
+    </div>
+    </th>
+  </tr>
+</thead>
+<tbody>
+    <tr>
+      <td>
+        <%= form_with model: @recipe, url: recipes_path do |f| %>
+          <%= f.collection_select :id, Recipe.all, :id, :name,  include_blank: "選択して下さい" %>
+          <%= f.submit '検索'%>
+        <% end %><br>       
+        <%= @recipes.name %><br>
+        <%= @recipes.cooktime %><br>
+        <%= @recipes.summary %><br>
+      </td>
+
+      <td rowspan ="2" style="width:700px; height:300px">
+      <h2>タイマーシート</h2>
+      <div class="progressWrapper">
+      <progress id="bar" value="0" max="<%= maxtime.max %>" min="0"></progress>
+      </div>
+
+    <script>
+      var timer,
+      limitMs = 0,
+      restMs = 0,
+      maxBar,
+      task_message,
+      start_intervalId = 1,
+      obj = document.getElementById("bar");
+
+      var countdown = function() {
+        restMs -= 1;
+
+        var restRate = (limitMs - restMs) / limitMs;
+        var restBarLength = maxBar * restRate
+
+        $('#bar').attr('value', restBarLength);
+
+        <% numscri = 0 %>
+        <% @tasks.each do |task| %>
+          restMs<%= numscri %>  -= 1;
+          strestMs<%= numscri %> -= 1;
+        
+          if (restMs<%= numscri %> <= 0) {
+            task_message = skna<%= numscri %> + "を終了します。<br/>" + skme<%= numscri %>;
+            alertify.log(task_message);
+            restMs<%= numscri %> = 999999999999999;
+          }
+
+          if (strestMs<%= numscri %> <= 0) {
+            task_message = skna<%= numscri %> + "を開始します。<br/>" + skme<%= numscri %>;
+            alertify.log(task_message);
+            strestMs<%= numscri %> = 999999999999999;
+          }
+      
+        <% numscri += 1 %>
+        <% end %>
+
+        if (restMs < 0) {
+            resetTimer();
+            alertify.log('料理が終了しました');
+        }
+
+      };
+
+      var resetTimer = function() {
+        clearInterval(timer);
+        limitMs = restMs = $('#time').val();
+        $('#bar').attr('value', 0);
+
+        <% numres = 0 %>
+        <% @tasks.each do |task| %>
+          limitMs<%= numres %> = restMs<%= numres %> = time<%= numres %>;        
+          stlimitMs<%= numres %> = strestMs<%= numres %> = skst<%= numres %>;        
+        <% numres += 1 %>
+        <% end %>
+
+        };
+
+        $(function() {
+          maxBar = $('#bar').attr('max');
+
+        $('#start').on('click', function() {
+        if (start_intervalId == 0) {
+          timer = setInterval('countdown()', 1000);
+          alertify.log('料理を再開します');
+          start_intervalId = 1;
+          } else {
+          resetTimer();
+          alertify.log('料理を開始します');
+          timer = setInterval('countdown()', 1000);
+        }
+          });
+
+        $('#stop').on('click', function() {
+          clearInterval(timer);
+          alertify.log('料理を中止します');
+          start_intervalId = 0;
+        });
+
+        $('#reset').on('click', function() {
+        resetTimer();
+        alertify.log('リセットします');
+        start_intervalId = 1;
+        });
+      });
+      
+      
+      </script>
+
+      <input id="taname" type="hidden" value="<%= taskname[4..-1] %>">
+      <input id="tacolo" type="hidden" value="<%= taskcolor[4..-1] %>">
+      <input id="tastti" type="hidden" value="<%= taskstarttime[2..-1] %>">
+      <input id="tacoti" type="hidden" value="<%= tasktime[2..-1] %>">
+
+        <canvas id="mychart-bar-stack"></canvas>
+        <%= javascript_pack_tag 'glaph' %>
+      </td>
+    <tr>
+    <td><%= image_tag @recipes.portrait.variant(resize_to_limit: [250, 250]) if @recipes.portrait.attached? %></td>
+    </tr>
+</tbody>
+</table>
+
+<script src="https://cdn.rawgit.com/alertifyjs/alertify.js/v1.0.10/dist/js/alertify.js"></script>

@@ -1,0 +1,115 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, or any plugin's
+ * vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any other CSS/SCSS
+ * files in this directory. Styles in this file should be added after the last require_* statement.
+ * It is generally better to create a new file per style scope.
+ *
+ *= require_tree .
+ *= require_self
+ */
+
+ .progressWrapper {
+    width: 100%;
+  }
+  
+  progress {
+    /* Turn off default styling. */
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    border: 0;
+  
+    height: 20px;
+    margin: 0% 1.5% 0% 8.5%;
+    width: 90%;
+
+    color: red;       /* IE */
+    background: navy; /* Firefox */
+  }
+  
+  /* Chrome needs '-webkit-progress-value' and '-webkit-progress-bar' attributes. */
+  progress::-webkit-progress-value {
+    background: red;
+  }
+  
+  progress::-webkit-progress-bar {
+    background: navy;
+  }
+  
+  /* Firefox needs only '-moz-progress-bar' attiribute. */
+  progress::-moz-progress-bar {
+    background: red;
+  }
+
+  li a {
+    text-decoration: none;
+    font-weight: bold;
+  }
+
+  .header_nav {
+    background: #fff;
+    display: flex;
+    height: 60px;
+    justify-content: space-between;
+    align-items: stretch;
+  }
+  .global_nav {
+    display: flex;
+    align-items: stretch;
+  }
+  .global_nav_item {
+    color: #333;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+  }
+  .logo {
+    width: 120px;
+    display: flex;
+    align-items: center;
+  }
+
+  #nav {
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+  }
+   
+  #nav button {
+    text-align: right;
+    text-decoration: none;
+    width: 150px;
+    text-align: center;
+    color: #333;
+    background-color: #fff;
+    height: 50px;
+    line-height: 50px;
+    margin-right: 2px;
+    border: 1px solid #333;
+    outline: none;
+    font-weight: bold;
+    font-size: 20px;
+    cursor: pointer;
+  }
+   
+  #nav a {
+    font-size: 12px;
+    text-decoration: none;
+    width: 150px;
+    border: 1px solid #333;
+    text-align: center;
+    color: #333;
+    background-color: #fff;
+    height: 48px;
+    line-height: 50px;
+    margin-right: 2px;
+    cursor: pointer;
+  }
+

@@ -1,0 +1,18 @@
+<table  style="width:1200px">
+<thead>
+  <tr>
+    <th style="width:500px; text-align: left; font-size: 20px;">レシピシート</th>
+  </tr>
+</thead>
+<tbody>
+    <tr>
+      <td>
+        <%= form_with model: @recipe, url: recipes_path do |f| %>
+          <%= f.collection_select :id, Recipe.all, :id, :name,  include_blank: "選択して下さい" %>
+          <%= f.submit '検索'%>
+        <% end %><br>       
+        </td>
+    </tr>
+</tbody>
+</table>
+      
